@@ -31,7 +31,7 @@
 ## Data model
 
 - `games`: `id`, `status` (`IN_PROGRESS`, `RED_WON`, `YELLOW_WON`, `DRAW`), `created_at`, `updated_at`
-  - `status` is a cached copy of state derived from the move log, updated in the same transaction as each move insert, so reads don't replay the log
+  - `status` is stored so a game's outcome can be queried directly in SQL without replaying moves; it's written in the same transaction as each move insert. The API still derives game state by replaying the move log
 - `moves`: `game_id`, `move_number`, `player`, `column_index`, `created_at`
   - Primary key `(game_id, move_number)` guarantees one move per move number in a game
   - Ordering is enforced by the server's `moveNumber` check. Moves on a game are serialized with a row lock (`SELECT ... FOR UPDATE` on the game), which prevents a deadlock found when testing simultaneous moves against MySQL; the primary key remains a backstop

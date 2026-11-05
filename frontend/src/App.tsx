@@ -156,7 +156,10 @@ export default function App() {
             flash('Could not refresh the game. Please reload the page.')
           }
         } else if (error instanceof ApiError && error.status === 422) {
-          flash(error.message)
+          // Columns are always in range and input stops once the game is over, so a 422
+          // from a column click means the column is full. (The server's message uses the
+          // API's 0-based column numbers, which don't match the 1-7 shown to players.)
+          flash('That column is full.')
         } else {
           flash('Something went wrong. Please try again.')
         }
