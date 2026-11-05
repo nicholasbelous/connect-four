@@ -77,14 +77,17 @@ CI runs both on every push and pull request ([.github/workflows/ci.yml](.github/
 
 | Area | Time |
 |---|---|
-| Planning and design | |
-| Game rules and tests | |
-| Persistence and API | |
-| Frontend | |
-| Docker, Kubernetes, and CI | |
-| Documentation | |
-| **Total** | |
+| Planning in a separate chat before the session | about 10 min |
+| Planning and setup | 5 min |
+| Backend and Docker | 45 min |
+| Game rules and tests | 10 min |
+| Persistence and API | 10 min |
+| Frontend UI | 15 min |
+| Kubernetes, CI, and docs | 20 min |
+| **Total** | **2 h (120 min)** |
+
+Measured from session and commit timestamps; breaks over 20 minutes excluded.
 
 ## AI usage
 
-_To be completed._ I used an AI coding assistant during this project; the full transcripts are in [ai-transcripts/](ai-transcripts/).
+I used Claude Code as the implementation agent, and Claude in a separate chat to plan the work and review the agent's output. I made the design decisions up front (the game choice, server-authoritative state, the move-log data model, the API contract, and scope) and wrote them into DECISIONS.md before any code. I had the agent write the game-rule tests first and reviewed them before any implementation. I reviewed the early steps individually; for the later phases, the agent built, tested, and committed each phase, and I reviewed the results. Along the way I redirected it: moving off an end-of-life Spring Boot version, correcting inaccurate design notes, and changing the UI's error wording. Its load testing against real MySQL found a deadlock under simultaneous moves, which was fixed with a row lock. The full agent transcript is in [ai-transcripts/](ai-transcripts/).
