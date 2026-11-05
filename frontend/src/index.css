@@ -1,0 +1,76 @@
+:root {
+  /* Page */
+  --bg-0: #070914;
+  --bg-1: #0d1230;
+  --ink: #eef1ff;
+  --ink-muted: #9aa3cc;
+  --ink-faint: #5d6694;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+
+  /* Discs: light (highlight), base, dark (shadow side), glow */
+  --red-1: #ff9aa2;
+  --red-2: #f2344f;
+  --red-3: #8e0b27;
+  --red-glow: rgba(255, 62, 92, 0.75);
+
+  --yellow-1: #fff4b0;
+  --yellow-2: #ffc22e;
+  --yellow-3: #b86e00;
+  --yellow-glow: rgba(255, 196, 46, 0.75);
+
+  font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-synthesis: none;
+  color: var(--ink);
+  background: var(--bg-0);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Scope a player's colours: anything inside reads --c1/--c2/--c3/--glow. */
+.player-red {
+  --c1: var(--red-1);
+  --c2: var(--red-2);
+  --c3: var(--red-3);
+  --glow: var(--red-glow);
+}
+
+.player-yellow {
+  --c1: var(--yellow-1);
+  --c2: var(--yellow-2);
+  --c3: var(--yellow-3);
+  --glow: var(--yellow-glow);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(1100px 620px at 50% -8%, rgba(76, 96, 255, 0.28), transparent 62%),
+    radial-gradient(760px 520px at 100% 105%, rgba(160, 60, 255, 0.16), transparent 60%),
+    radial-gradient(640px 460px at -5% 90%, rgba(255, 70, 110, 0.1), transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0) 70%);
+  background-attachment: fixed;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+#root {
+  min-height: 100dvh;
+}

@@ -1,0 +1,282 @@
+.app {
+  /*
+   * One cell of the board. Everything on the board scales from this, so it's sized to fit
+   * both the viewport width (7 columns + frame) and height (header, status, ghost lane,
+   * 6 rows + frame).
+   */
+  --cell: max(34px, min(88px, calc((100vw - 2rem) / 7.4), calc((100dvh - 15rem) / 7.4)));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 0 1rem 1.5rem;
+}
+
+/* Header */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: calc(7 * var(--cell) + 2 * 0.18 * var(--cell) + 2rem);
+  padding: 1.25rem 0 0.5rem;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-size: clamp(1.15rem, 3.4vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  position: relative;
+  display: inline-block;
+  width: 2.1em;
+  height: 1.3em;
+  flex: none;
+}
+
+.brand-mark span {
+  position: absolute;
+  top: 0;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--c1), var(--c2) 50%, var(--c3));
+  box-shadow:
+    inset 0 -0.08em 0.15em rgba(0, 0, 0, 0.35),
+    0 0.1em 0.3em rgba(0, 0, 0, 0.4);
+}
+
+.brand-mark span:first-child {
+  left: 0;
+}
+
+.brand-mark span:last-child {
+  left: 0.8em;
+}
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.62em 1.2em;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #8ea2ff;
+  outline-offset: 3px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.btn-primary {
+  border-color: transparent;
+  background: linear-gradient(180deg, #5b7cff, #3553e6);
+  box-shadow:
+    0 8px 22px -8px rgba(70, 100, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #6d8bff, #3d5cf0);
+}
+
+.btn-icon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+/* Main stage */
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* On tall, narrow screens, centre the game in the space below the header. */
+@media (max-aspect-ratio: 3 / 4) {
+  .stage {
+    flex: 1;
+    justify-content: center;
+    padding-bottom: 3rem;
+  }
+}
+
+.status-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.25rem;
+  width: 100%;
+}
+
+.hint {
+  margin: 0.25rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.hint kbd {
+  padding: 0.1em 0.45em;
+  border: 1px solid var(--glass-border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--glass);
+  font: inherit;
+  font-size: 0.8em;
+  color: var(--ink-muted);
+}
+
+/* Not found / error screen */
+
+.message-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 26rem;
+  margin: auto;
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  animation: screen-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.message-screen h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.message-screen p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.empty-slot {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #050817, #0f1638);
+  box-shadow:
+    inset 0 6px 14px rgba(0, 0, 0, 0.8),
+    0 0 0 10px #2347d4,
+    0 0 0 11px rgba(255, 255, 255, 0.15),
+    0 18px 40px -10px rgba(35, 71, 212, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+/* Toast for brief messages, e.g. a 422 from the server */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 10;
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem 1.2rem;
+  border: 1px solid rgba(255, 120, 140, 0.35);
+  border-radius: 14px;
+  background: rgba(40, 12, 24, 0.92);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.8);
+  color: #ffd5dc;
+  font-weight: 500;
+  transform: translateX(-50%);
+  animation:
+    toast-in 0.3s cubic-bezier(0.2, 1.2, 0.4, 1) both,
+    toast-out 0.3s ease-in 2.3s forwards;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.96);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    padding-top: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.55em 1em;
+    font-size: 0.9rem;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message-screen,
+  .toast {
+    animation-duration: 0.01ms;
+    animation-delay: 0s;
+  }
+
+  .toast {
+    animation: none;
+  }
+}
