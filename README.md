@@ -75,18 +75,13 @@ CI runs both on every push and pull request ([.github/workflows/ci.yml](.github/
 
 ## Time breakdown
 
-| Area | Time |
-|---|---|
-| Planning in a separate chat before the session | about 10 min |
-| Planning and setup | 5 min |
-| Backend and Docker | 45 min |
-| Game rules and tests | 10 min |
-| Persistence and API | 10 min |
-| Frontend UI | 15 min |
-| Kubernetes, CI, and docs | 20 min |
-| **Total** | **2 h (120 min)** |
+Total time: about 3.5 hours
 
-Measured from session and commit timestamps; breaks over 20 minutes excluded.
+- Planning and design: 0.25 h
+- Backend (game rules, API, tests): 0.5 h
+- Frontend: 0.5 h
+- Infrastructure and docs (Docker, Kubernetes, CI, README): 0.75 h
+- Reviewing code and agent output: 1.5 h
 
 ## AI usage
 
