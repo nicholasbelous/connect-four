@@ -36,6 +36,23 @@
   - Primary key `(game_id, move_number)` guarantees one move per move number in a game
   - Ordering is enforced by the server's `moveNumber` check. Moves on a game are serialized with a row lock (`SELECT ... FOR UPDATE` on the game), which prevents a deadlock found when testing simultaneous moves against MySQL; the primary key remains a backstop
 
+## Trade-offs
+
+- Connect Four over chess: a small ruleset left time for a polished core (rules, persistence, API, UI, deployment) rather than a wide but thin one
+- Spring Boot 4.1 over 3.5: 3.5's open-source support ended on 2026-06-30
+- React over Vue: faster to build with inside the time box
+- oxlint over ESLint: the current Vite React template ships oxlint; kept it rather than add dependencies
+- Local hotseat over live multiplayer: the move log is the foundation for adding it, since each new move could be broadcast to other clients
+- The frontend shows its own wording for a full column ("That column is full.") because the API's messages use 0-based column numbers, while players see columns 1–7
+
+## Verification
+
+- Game rule tests were checked by deliberately introducing three bugs (one-way win detection, draw checked before win, full column checked before game over); each made tests fail
+- The draw test proves its board is a draw with an independent brute-force scan for four in a row, not the game's own win detection
+- Simultaneous moves were load-tested against real MySQL (10 identical requests at once). This found a deadlock that returned 500s; after adding the row lock, every round gave one 200 and nine 409s
+- The UI was checked end to end in headless Chrome: drop animation, ghost preview, win highlight and banner, refresh resume, 409 and 422 handling, not-found screen, reduced motion, and a 375px phone layout
+- The Kubernetes manifests were tested on kind: all pods became ready, and a game was created and played through the frontend
+
 ## Out of scope (next steps)
 
 - Online multiplayer (WebSockets on top of the move log)
