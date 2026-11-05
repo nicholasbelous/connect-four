@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: connect-four
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/connect_four}
+    username: ${DB_USERNAME:connect_four}
+    password: ${DB_PASSWORD:connect_four}
+  jpa:
+    hibernate:
+      ddl-auto: validate # Flyway owns the schema
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
