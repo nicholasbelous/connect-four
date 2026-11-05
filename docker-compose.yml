@@ -1,0 +1,42 @@
+services:
+  mysql:
+    image: mysql:8.4
+    # Credentials are for local use only; never reuse them in a shared or deployed environment.
+    environment:
+      MYSQL_DATABASE: connect_four
+      MYSQL_USER: connect_four
+      MYSQL_PASSWORD: connect_four
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      # TCP (127.0.0.1), not the socket, so the check fails during first-run init,
+      # when MySQL runs a temporary server with networking disabled
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    # No ports published: only the backend reaches MySQL, over the Compose network
+
+  backend:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/connect_four
+      DB_USERNAME: connect_four
+      DB_PASSWORD: connect_four
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  mysql-data:
